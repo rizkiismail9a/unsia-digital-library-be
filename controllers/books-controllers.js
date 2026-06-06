@@ -1,0 +1,77 @@
+const books = require("../models/books");
+
+const getAllBooks = async (req, res, next) => {
+  try {
+    const data = await books.find({ deletedAt: null });
+
+    if (data) {
+      return res.status(200).json({
+        data,
+      });
+    }
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+};
+
+/**
+ * Tambah satu buku
+ */
+const addNewBook = async (req, res, next) => {
+  try {
+    const book = await books.create(req.body);
+    res.status(201).json({ message: "Buku berhasil ditambahkan", data: book });
+  } catch (err) {
+    next(err);
+  }
+};
+
+/**
+ * Edit satu buku
+ */
+const editOneBook = async (req, res, next) => {
+  try {
+    const book = await books.findByIdAndUpdate(
+      req.params.id,
+      { $set: req.body },
+      {
+        new: true, // kembalikan data setelah diupdate
+        runValidators: true, // jalankan validasi Mongoose schema
+      },
+    );
+
+    if (!book) {
+      return res.status(404).json({ message: "Buku tidak ditemukan" });
+    }
+
+    res.json({ message: "Buku berhasil diupdate", data: book });
+  } catch (err) {
+    next(err);
+  }
+};
+
+/**
+ * Soft delete satu buku
+ */
+const deleteBook = async (req, res, next) => {
+  try {
+    const data = await books.findByIdAndUpdate(
+      req.params.id,
+      { deletedAt: new Date() },
+      {
+        new: true,
+      },
+    );
+
+    if (!data) {
+      return res.status(404).json({ message: "Buku tidak ditemukan" });
+    }
+
+    res.status(200).json({ message: "Buku berhasil dihapus" });
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = { getAllBooks, addNewBook, editOneBook, deleteBook };
