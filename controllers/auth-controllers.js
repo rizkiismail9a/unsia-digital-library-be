@@ -24,6 +24,7 @@ const register = async (req, res, next) => {
     const { password, ...userData } = user.toObject();
 
     res.status(201).json({
+      success: true,
       message: "Registrasi berhasil",
       data: userData,
     });
@@ -53,9 +54,12 @@ const login = async (req, res, next) => {
 
     const accessToken = await generateTokens(existingUser);
 
+    const { password, ...userData } = existingUser.toObject();
+
     return res.status(200).json({
+      success: true,
       message: "Login berhasil",
-      user: existingUser,
+      user: userData,
       token: accessToken,
     });
   } catch (error) {
