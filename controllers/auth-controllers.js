@@ -1,4 +1,6 @@
 const User = require("../models/users");
+const bcrypt = require("bcrypt");
+const { generateTokens } = require("../utils/userToken");
 
 const register = async (req, res, next) => {
   try {
@@ -26,8 +28,38 @@ const register = async (req, res, next) => {
       data: userData,
     });
   } catch (error) {
-    next(err);
+    next(error);
   }
 };
 
-module.exports = { register };
+const login = async (req, res, next) => {
+  try {
+    // Cek apakah email sudah digunakan
+    const existingUser = await User.findOne({ email: req.body.email });
+
+    if (!existingUser) {
+      return res.status(401).json({ message: "Email atau kata sandi salah" });
+    }
+
+    // Bandingkan kata sandi
+    const isPassCorrect = await bcrypt.compare(
+      req.body.password,
+      existingUser.password,
+    );
+
+    if (!isPassCorrect) {
+      return res.status(401).json({ message: "Email atau kata sandi salah" });
+    }
+
+    const accessToken = await generateTokens(existingUser);
+
+    return res.status(200).json({
+      message: "Login berhasil",
+      user: existingUser,
+      token: accessToken,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+module.exports = { register, login };

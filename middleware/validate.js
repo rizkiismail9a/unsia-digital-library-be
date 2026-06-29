@@ -7,7 +7,7 @@ const requestValidator = (schema) => {
       });
 
       if (error) {
-        return res.status(400).json({
+        return res.status(422).json({
           message: "Validasi gagal",
           errors: error.details.map((e) => ({
             field: e.path[0],
