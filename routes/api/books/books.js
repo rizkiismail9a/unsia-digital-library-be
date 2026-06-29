@@ -6,15 +6,15 @@ const {
   editOneBook,
   deleteBook,
 } = require("../../../controllers/books-controllers");
-const { validateBook } = require("../../../middleware/book");
 const {
   createBookSchema,
   updateBookSchema,
 } = require("../../../validators/bookValidator");
+const { requestValidator } = require("../../../middleware/validate");
 
 router.get("/all-books", getAllBooks);
-router.post("/add-book", validateBook(createBookSchema), addNewBook);
-router.put("/update-book/:id", validateBook(updateBookSchema), editOneBook);
+router.post("/add-book", requestValidator(createBookSchema), addNewBook);
+router.put("/update-book/:id", requestValidator(updateBookSchema), editOneBook);
 router.delete("/delete-book/:id", deleteBook);
 
 module.exports = router;

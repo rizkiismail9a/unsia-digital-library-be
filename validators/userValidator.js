@@ -11,4 +11,4 @@ const registerScheme = Joi.object({
   role: Joi.string().valid("admin", "member").default("member"),
 });
 
-module.exports = registerScheme;
+module.exports = { registerScheme };
