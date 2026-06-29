@@ -15,6 +15,16 @@ app.get("/", (req, res) => {
 const booksRoutes = require("./routes/api/books/books");
 const errorHandler = require("./middleware/errorHandler");
 
+app.use("/api/health", async (req, res, next) => {
+  try {
+    return res.status(200).json({
+      message: "API berjalan dengan baik",
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
 app.use("/api/books", booksRoutes);
 
 // Middleware 404 — letakkan setelah semua route
