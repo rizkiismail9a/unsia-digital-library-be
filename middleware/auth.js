@@ -22,9 +22,7 @@ const authMiddleware = async (req, res, next) => {
       });
     }
 
-    const decode = jwt.decode(token, process.env.JWT_SECRET, {
-      algorithms: ["HS256"],
-    });
+    const decode = jwt.verify(token, process.env.JWT_SECRET);
 
     // Cari user di database
     const user = await User.findById(decode.sub);
