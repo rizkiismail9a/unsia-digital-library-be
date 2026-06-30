@@ -8,7 +8,6 @@ const registerScheme = Joi.object({
     .valid(Joi.ref("password"))
     .required()
     .messages({ "any.only": "Konfirmasi password tidak cocok" }),
-  role: Joi.string().valid("admin", "member").default("member"),
 });
 
 const loginScheme = Joi.object({

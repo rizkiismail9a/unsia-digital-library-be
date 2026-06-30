@@ -23,10 +23,13 @@ const register = async (req, res, next) => {
     // Jangan kembalikan password ke client
     const { password, ...userData } = user.toObject();
 
+    const accessToken = await generateTokens(user);
+
     res.status(201).json({
       success: true,
       message: "Registrasi berhasil",
       data: userData,
+      token: accessToken,
     });
   } catch (error) {
     next(error);
