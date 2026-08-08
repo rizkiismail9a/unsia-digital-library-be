@@ -3,6 +3,12 @@ const mongoose = require("mongoose");
 
 // Koneksi ke database
 const connectDB = async () => {
+  // 1 = connected, 2 = connecting
+  if (mongoose.connection.readyState >= 1) {
+    console.log("DB sudah terhubung, skip koneksi ulang");
+    return;
+  }
+
   try {
     const db = process.env.MONGODB_URL;
     const connection = await mongoose.connect(db);
