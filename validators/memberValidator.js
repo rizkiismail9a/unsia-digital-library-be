@@ -25,7 +25,7 @@ const createMemberSchema = Joi.object({
       "string.empty": "Nomor telepon tidak boleh kosong",
       "any.required": "Nomor telepon wajib diisi",
     }),
-  prodi: Joi.string().trim().default("Informatika"),
+  prodi: Joi.string().trim().default("informatika"),
   status: Joi.string()
     .valid("Active", "Inactive", "Suspended")
     .default("Active")
