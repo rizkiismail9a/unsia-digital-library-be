@@ -29,6 +29,7 @@ const authRoutes = require("./routes/api/auth/auth");
 const userRoutes = require("./routes/api/users/users");
 const memberRoutes = require("./routes/api/member/member");
 const loanRoutes = require("./routes/api/loan/loan");
+const dashboardRoutes = require("./routes/api/statistics/statistics");
 const errorHandler = require("./middleware/errorHandler");
 
 app.use("/api/books", booksRoutes);
@@ -36,6 +37,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/member", memberRoutes);
 app.use("/api/loan", loanRoutes);
+app.use("/api/statistics", dashboardRoutes);
 
 // Middleware 404 — letakkan setelah semua route
 app.use((req, res, next) => {
