@@ -11,10 +11,21 @@ const {
   updateBookSchema,
 } = require("../../../validators/bookValidator");
 const { requestValidator } = require("../../../middleware/validate");
+const authMiddleware = require("../../../middleware/auth");
 
 router.get("/all-books", getAllBooks);
-router.post("/add-book", requestValidator(createBookSchema), addNewBook);
-router.put("/update-book/:id", requestValidator(updateBookSchema), editOneBook);
-router.delete("/delete-book/:id", deleteBook);
+router.post(
+  "/add-book",
+  authMiddleware,
+  requestValidator(createBookSchema),
+  addNewBook,
+);
+router.put(
+  "/update-book/:id",
+  authMiddleware,
+  requestValidator(updateBookSchema),
+  editOneBook,
+);
+router.delete("/delete-book/:id", authMiddleware, deleteBook);
 
 module.exports = router;

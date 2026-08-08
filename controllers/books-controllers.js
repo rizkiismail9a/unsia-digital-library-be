@@ -20,8 +20,26 @@ const getAllBooks = async (req, res, next) => {
  */
 const addNewBook = async (req, res, next) => {
   try {
-    const book = await books.create(req.body);
-    res.status(201).json({ message: "Buku berhasil ditambahkan", data: book });
+    if (req.user) {
+      const isAdmin = req.user.role === "admin";
+
+      if (isAdmin) {
+        const book = await books.create(req.body);
+        return res
+          .status(201)
+          .json({ message: "Buku berhasil ditambahkan", data: book });
+      } else {
+        return res.status(401).json({
+          success: false,
+          message: "Akses hanya untuk admin",
+        });
+      }
+    } else {
+      return res.status(404).json({
+        success: false,
+        message: "User tidak ditemukan",
+      });
+    }
   } catch (err) {
     next(err);
   }
@@ -32,20 +50,36 @@ const addNewBook = async (req, res, next) => {
  */
 const editOneBook = async (req, res, next) => {
   try {
-    const book = await books.findByIdAndUpdate(
-      req.params.id,
-      { $set: req.body },
-      {
-        new: true, // kembalikan data setelah diupdate
-        runValidators: true, // jalankan validasi Mongoose schema
-      },
-    );
+    if (req.user) {
+      const isAdmin = req.user.role === "admin";
 
-    if (!book) {
-      return res.status(404).json({ message: "Buku tidak ditemukan" });
+      if (isAdmin) {
+        const book = await books.findByIdAndUpdate(
+          req.params.id,
+          { $set: req.body },
+          {
+            new: true, // kembalikan data setelah diupdate
+            runValidators: true, // jalankan validasi Mongoose schema
+          },
+        );
+
+        if (!book) {
+          return res.status(404).json({ message: "Buku tidak ditemukan" });
+        }
+
+        return res.json({ message: "Buku berhasil diupdate", data: book });
+      } else {
+        return res.status(401).json({
+          success: false,
+          message: "Akses hanya untuk admin",
+        });
+      }
+    } else {
+      return res.status(404).json({
+        success: false,
+        message: "User tidak ditemukan",
+      });
     }
-
-    res.json({ message: "Buku berhasil diupdate", data: book });
   } catch (err) {
     next(err);
   }
@@ -56,19 +90,35 @@ const editOneBook = async (req, res, next) => {
  */
 const deleteBook = async (req, res, next) => {
   try {
-    const data = await books.findByIdAndUpdate(
-      req.params.id,
-      { deletedAt: new Date() },
-      {
-        new: true,
-      },
-    );
+    if (req.user) {
+      const isAdmin = req.user.role === "admin";
 
-    if (!data) {
-      return res.status(404).json({ message: "Buku tidak ditemukan" });
+      if (isAdmin) {
+        const data = await books.findByIdAndUpdate(
+          req.params.id,
+          { deletedAt: new Date() },
+          {
+            new: true,
+          },
+        );
+
+        if (!data) {
+          return res.status(404).json({ message: "Buku tidak ditemukan" });
+        }
+
+        return res.status(200).json({ message: "Buku berhasil dihapus" });
+      } else {
+        return res.status(401).json({
+          success: false,
+          message: "Akses hanya untuk admin",
+        });
+      }
+    } else {
+      return res.status(404).json({
+        success: false,
+        message: "User tidak ditemukan",
+      });
     }
-
-    res.status(200).json({ message: "Buku berhasil dihapus" });
   } catch (error) {
     next(error);
   }
