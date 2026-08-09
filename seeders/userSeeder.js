@@ -31,7 +31,7 @@ const seed = async () => {
 
     // Buat 10 member dummy
     const memberPromises = Array.from({ length: 10 }, () =>
-      userFactory("member"),
+      userFactory("user"),
     );
     const members = await Promise.all(memberPromises);
     await User.insertMany(members); // sudah di-hash manual di factory

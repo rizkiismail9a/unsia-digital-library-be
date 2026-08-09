@@ -3,7 +3,7 @@ const router = express.Router();
 const authMiddleware = require("../../../middleware/auth");
 const {
   getMembers,
-  getMemberById,
+  getMyMembership,
   createMember,
 } = require("../../../controllers/member-controllers");
 const authLimiter = require("../../../middleware/rateLimiter");
@@ -11,7 +11,7 @@ const { requestValidator } = require("../../../middleware/validate");
 const { createMemberSchema } = require("../../../validators/memberValidator");
 
 router.get("/", authMiddleware, getMembers);
-router.get("/:id", authMiddleware, getMemberById);
+router.get("/my-membership", authMiddleware, getMyMembership);
 
 router.post(
   "/create",

@@ -7,7 +7,11 @@ const userSchema = new mongoose.Schema(
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
-    role: { type: String, enum: ["admin", "member"], default: "member" },
+    role: {
+      type: String,
+      enum: ["admin", "member", "user"],
+      default: "user",
+    },
     deletedAt: { type: Date, default: null },
   },
   { timestamps: true },
