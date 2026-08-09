@@ -60,7 +60,15 @@ const getMyLoans = async (req, res, next) => {
 
     // 3. Susun kueri filter
     const filter = {
-      $or: [{ member: { $in: searchTargets } }, { createdBy: req.user._id }],
+      $and: [
+        {
+          $or: [
+            { member: { $in: searchTargets } },
+            { createdBy: req.user._id },
+          ],
+        },
+        { status: "Borrowed" },
+      ],
     };
 
     // Dukungan filter query parameter opsional (misal: /api/loans/my-loans?status=Borrowed)
