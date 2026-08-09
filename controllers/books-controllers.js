@@ -124,4 +124,30 @@ const deleteBook = async (req, res, next) => {
   }
 };
 
-module.exports = { getAllBooks, addNewBook, editOneBook, deleteBook };
+/**
+ *
+ * Ambil satu buku
+ */
+const getBookById = async (req, res, next) => {
+  try {
+    const book = await books.findById(req.params.id);
+
+    if (!book) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Buku tidak ditemukan" });
+    }
+
+    return res.status(200).json({ success: true, data: book });
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = {
+  getAllBooks,
+  addNewBook,
+  editOneBook,
+  deleteBook,
+  getBookById,
+};

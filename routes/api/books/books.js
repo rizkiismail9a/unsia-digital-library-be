@@ -5,6 +5,7 @@ const {
   addNewBook,
   editOneBook,
   deleteBook,
+  getBookById,
 } = require("../../../controllers/books-controllers");
 const {
   createBookSchema,
@@ -14,6 +15,7 @@ const { requestValidator } = require("../../../middleware/validate");
 const authMiddleware = require("../../../middleware/auth");
 
 router.get("/all-books", getAllBooks);
+router.get("/:id", getBookById);
 router.post(
   "/add-book",
   authMiddleware,
