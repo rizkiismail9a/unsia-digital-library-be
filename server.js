@@ -2,10 +2,13 @@ const express = require("express");
 const mongoose = require("mongoose");
 const { connectDB } = require("./config/db");
 const helmet = require("helmet");
+const cors = require("cors");
+const { corsOptions } = require("./config/cors");
 
 const port = 8000;
 const app = express();
 
+app.use(cors(corsOptions));
 app.use(helmet()); // Aktifkan semua header keamanan browser
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
