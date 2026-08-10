@@ -10,11 +10,11 @@ const getAllBooks = async (req, res, next) => {
 
     if (data) {
       return res.status(200).json({
+        success: true,
         data,
       });
     }
   } catch (error) {
-    console.error(error);
     next(error);
   }
 };
