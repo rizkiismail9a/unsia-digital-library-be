@@ -2,7 +2,11 @@ const books = require("../models/books");
 
 const getAllBooks = async (req, res, next) => {
   try {
-    const data = await books.find({ deletedAt: null });
+    const { includesDeleted } = req.query;
+
+    const filter = includesDeleted === "true" ? {} : { deletedAt: null };
+
+    const data = await books.find(filter);
 
     if (data) {
       return res.status(200).json({
@@ -103,10 +107,14 @@ const deleteBook = async (req, res, next) => {
         );
 
         if (!data) {
-          return res.status(404).json({ message: "Buku tidak ditemukan" });
+          return res
+            .status(404)
+            .json({ success: false, message: "Buku tidak ditemukan" });
         }
 
-        return res.status(200).json({ message: "Buku berhasil dihapus" });
+        return res
+          .status(200)
+          .json({ success: true, message: "Buku berhasil dihapus" });
       } else {
         return res.status(401).json({
           success: false,
