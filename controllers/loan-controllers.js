@@ -11,7 +11,7 @@ const getLoans = async (req, res, next) => {
       if (isAdmin) {
         const loans = await Loan.find()
           .populate("book", "title author isbn category")
-          .populate("member", "nim name email prodi")
+          .populate("member", "nim name email prodi phone")
           .populate("createdBy", "name email")
           .sort({ createdAt: -1 });
 
