@@ -21,7 +21,10 @@ const getMyProfile = async (req, res, next) => {
 const getAllUsers = async (req, res, next) => {
   try {
     if (req.user && req.user.role === "admin") {
-      const allUsers = await User.find({ deletedAt: null }, { password: 0 });
+      const allUsers = await User.find(
+        { deletedAt: null },
+        { password: 0 },
+      ).sort({ createdAt: -1 });
 
       if (allUsers) {
         return res.status(200).json({
