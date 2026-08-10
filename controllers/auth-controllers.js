@@ -7,7 +7,12 @@ const register = async (req, res, next) => {
     // Cek apakah email sudah digunakan
     const existingUser = await User.findOne({ email: req.body.email });
     if (existingUser) {
-      return res.status(409).json({ message: "Email sudah digunakan" });
+      return res
+        .status(409)
+        .json({
+          message: "Validasi gagal",
+          errors: [{ field: "email", message: "Alamat email sudah digunakan" }],
+        });
     }
 
     // Buat user baru — password di-hash otomatis oleh pre("save")

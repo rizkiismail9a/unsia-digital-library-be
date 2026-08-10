@@ -15,8 +15,7 @@ const createMemberSchema = Joi.object({
   }),
   phone: Joi.string()
     .trim()
-    .min(10)
-    .max(15)
+    .min(9)
     .pattern(/^[0-9+\-\s]+$/)
     .required()
     .messages({
